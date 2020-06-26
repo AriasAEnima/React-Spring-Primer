@@ -32,8 +32,7 @@ public class WebSiteController {
     }
     
     @GetMapping("/circulos")
-     public  List<String> circulos() { 
-        System.out.println(circulos);
+     public  List<String> circulos() {      
         return circulos;
     }     
 
