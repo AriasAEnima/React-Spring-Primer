@@ -5,7 +5,7 @@
  */
 //import React from 'react';
 //import {circulos} from './Sketch';
-var m=0;
+var vaciado=true;
 class Dibujo extends React.Component {
     constructor(props) {
         super(props);
@@ -17,7 +17,7 @@ class Dibujo extends React.Component {
     }
     componentDidMount() {
         this.timerID = setInterval(
-                () => this.sendStatus(),               
+                () => {this.sendStatus();  this.actualizar();   },               
                 2000
                 );            
     
@@ -44,8 +44,7 @@ class Dibujo extends React.Component {
                     
 
                 });   
-                
-            this.actualizar();     
+         
                
      }
      
@@ -59,10 +58,14 @@ class Dibujo extends React.Component {
                               status: result
                           }
                           );
-                         if(result.length===0){
+                         if(result.length===0 && !vaciado){
                              console.log("VACIOOO ");
                              vaciar();
-                         }                         
+                             okRunD();
+                             vaciado=true;
+                         }else if(result.length!==0 ){
+                             vaciado=false;
+                         }              
                           console.log("result:" + result.toString() + "s");
                           console.log("estado:" + this.state.status);
                           addCirculos(this.state.status);
@@ -80,13 +83,13 @@ class Dibujo extends React.Component {
      }
      
     reiniciar(){     
-         vaciarSinLimpiar();
+         vaciar();
+         stopD();
         fetch('/reiniciar', {
               method: 'POST',               
           })
                   .then(function (response) {                        
-                      if (response.ok) {       
-                          
+                      if (response.ok) {                               
                           return response.text()
                       } else {                          
                           throw "Error en la llamada Ajax";

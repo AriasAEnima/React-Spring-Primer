@@ -51,7 +51,13 @@ function setup() {
   canvas.parent('recuadro');
 } 
 
+function stopD(){
+    noLoop();
+}
 
+function okRunD(){
+    loop();
+}
 function addCirculos(json){     
     json.forEach( function (c) {
        var nuevoCirculoJson =JSON.parse(c);
