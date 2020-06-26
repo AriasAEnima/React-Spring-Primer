@@ -5,6 +5,7 @@
  */
 //import React from 'react';
 //import {circulos} from './Sketch';
+var vaciado=true;
 class Dibujo extends React.Component {
     constructor(props) {
         super(props);
@@ -57,12 +58,15 @@ class Dibujo extends React.Component {
                               status: result
                           }
                           );
-                         if(result.length===0){
+                         if(result.length===0 && !vaciado){
                              console.log("VACIOOO ");
                              vaciar();
-                             okRunD();                           
-                         }
-                          console.log("result:" + result.toString() + "s");
+                             okRunD();          
+                             vaciado=true;
+                       }else if(result.length!==0 ){
+                            vaciado=false;                       
+                      }
+                      console.log("result:" + result.toString() + "s");
                           console.log("estado:" + this.state.status);
                           addCirculos(this.state.status);
                       },
