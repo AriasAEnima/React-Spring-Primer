@@ -17,35 +17,13 @@ class Dibujo extends React.Component {
     }
     componentDidMount() {
         this.timerID = setInterval(
-                () => this.checkStatus(),               
+                () => this.sendStatus(),               
                 2000
-                );       
+                );            
     
     }
 
-    checkStatus() {      
-         fetch("/circulos")
-                .then(res => res.json())
-                .then(
-                        (result) => {
-                    this.setState({
-                        isLoaded: true,
-                        status: result
-                    });                                
-                    
-                },
-                // Note: it's important to handle errors here
-                        // instead of a catch() block so that we don't swallow
-                                // exceptions from actual bugs in components.
-                            (error) => {
-                        this.setState({
-                            isLoaded: true,
-                            error
-                        });
-                    }
-                    );                                          
-                    
-        addCirculos(this.state.status);        
+    sendStatus() {   
                      
         const data = new FormData();       
         data.append('lista', circles());            
@@ -54,19 +32,55 @@ class Dibujo extends React.Component {
             body: data
         })
                 .then(function (response) {                        
-                    if (response.ok) {
+                    if (response.ok) {                           
                         //console.log("paso", data);   
-
+                       
+                        vaciarSinLimpiar();
                         return response.text();
                     } else {
-                        console.log("no paso :(", data);
+                        console.log("Algo paso", data);
                         throw "Error en la llamada Ajax";
                     }
+                    
 
-                });
+                });   
+                
+            this.actualizar();     
+               
      }
-    reiniciar(){
-          vaciar();
+     
+     actualizar(){
+          fetch("/circulos")
+                      .then(res => res.json())
+                      .then(
+                              (result) => {
+                          this.setState({
+                              isLoaded: true,
+                              status: result
+                          }
+                          );
+                         if(result.length===0){
+                             console.log("VACIOOO ");
+                             vaciar();
+                         }                         
+                          console.log("result:" + result.toString() + "s");
+                          console.log("estado:" + this.state.status);
+                          addCirculos(this.state.status);
+                      },
+                              // Note: it's important to handle errors here
+                                      // instead of a catch() block so that we don't swallow
+                                              // exceptions from actual bugs in components.
+                                                      (error) => {
+                                                  this.setState({
+                                                      isLoaded: true,
+                                                      error
+                                                  });
+                                              }); 
+         
+     }
+     
+    reiniciar(){     
+         vaciarSinLimpiar();
         fetch('/reiniciar', {
               method: 'POST',               
           })

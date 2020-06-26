@@ -1,8 +1,9 @@
-var circulos = [];
+ let circulos = [];
 var canvas;
-var r = Math.floor(Math.random()*240)+10;          // Random between 0-255
-var g = Math.floor(Math.random()*240)+10;          // Random between 0-255
-var b = Math.floor(Math.random()*240)+10;
+const r = Math.floor(Math.random()*240)+10;          // Random between 0-255
+const g = Math.floor(Math.random()*240)+10;          // Random between 0-255
+const b = Math.floor(Math.random()*240)+10;
+
 class Circle {
   constructor(x, y) {
     this.x = x;
@@ -13,15 +14,22 @@ class Circle {
   } 
 }
 
-function vaciar(){
+function vaciarSinLimpiar(){
     noLoop();
-    circulos=[];
-    clear();
-    consolecircles();
+    circulos.length=0;  
     loop();
 }
 
-function circles(){
+function vaciar(){
+    noLoop();
+    circulos.length=0;
+    clear();   
+    console.log("Se llamo a reiniicar");
+    loop();
+}
+
+function circles(){    
+    consolecircles();
     var ans="";      
     for (var i=0; i<circulos.length-1; i++){        
         ans+=JSON.stringify(circulos[i])+",";
@@ -44,12 +52,17 @@ function setup() {
 } 
 
 
-function addCirculos(json){
+function addCirculos(json){     
     json.forEach( function (c) {
        var nuevoCirculoJson =JSON.parse(c);
        addCircle(new Circle(nuevoCirculoJson.x,nuevoCirculoJson.y,nuevoCirculoJson.r,nuevoCirculoJson.g,nuevoCirculoJson.b));
         
     });    
+    for(var i=0;i<circulos.length ;i++){
+        fill(circulos[i].r,circulos[i].g,circulos[i].b);         
+        ellipse(circulos[i].x, circulos[i].y, 20, 20);
+        noStroke();
+    }
 }
 
 function addCircle(circle){
@@ -67,18 +80,19 @@ function addCircle(circle){
 }
 
 function draw() {     
-    for(var i=0;i<circulos.length ;i++){
-        fill(circulos[i].r,circulos[i].g,circulos[i].g);         
-        ellipse(circulos[i].x, circulos[i].y, 20, 20);
-        noStroke();
-    }
+//    for(var i=0;i<circulos.length ;i++){
+//        fill(circulos[i].r,circulos[i].g,circulos[i].g);         
+//        ellipse(circulos[i].x, circulos[i].y, 20, 20);
+//        noStroke();
+//    }
      
     if (mouseIsPressed === true) {       
         addCircle(new Circle(mouseX, mouseY,r,g,b));
+        fill(r,g,b);         
+        ellipse(mouseX, mouseY, 20, 20);
+        noStroke();
     }   
-    if (mouseIsPressed === false) {   
-        fill(255,255,255);
-    }    
+
 }
 //export {circulos};
 
